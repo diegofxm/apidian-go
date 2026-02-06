@@ -8,6 +8,7 @@ import (
 
 	"github.com/diegofxm/ubl21-dian/signature"
 	"github.com/diegofxm/ubl21-dian/soap"
+	"github.com/diegofxm/ubl21-dian/soap/types"
 )
 
 // GetInvoiceStatus consulta el estado de una factura en DIAN usando TrackId
@@ -41,14 +42,14 @@ func (s *InvoiceService) GetInvoiceStatus(id int64, trackID string, userID int64
 	}
 
 	// 4. Crear cliente SOAP
-	var environment soap.Environment
+	var environment types.Environment
 	if invoice.Software.Environment == "1" {
-		environment = soap.Produccion
+		environment = types.Produccion
 	} else {
-		environment = soap.Habilitacion
+		environment = types.Habilitacion
 	}
 
-	config := &soap.Config{
+	config := &types.Config{
 		Environment: environment,
 		Certificate: clientPemPath,
 		PrivateKey:  clientPemPath,
@@ -59,7 +60,7 @@ func (s *InvoiceService) GetInvoiceStatus(id int64, trackID string, userID int64
 	}
 
 	// 5. Llamar GetStatus
-	statusReq := &soap.GetStatusRequest{
+	statusReq := &types.GetStatusRequest{
 		TrackId: trackID,
 	}
 	statusResp, err := client.GetStatus(statusReq)

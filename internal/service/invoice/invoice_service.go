@@ -12,6 +12,7 @@ import (
 
 	"github.com/diegofxm/ubl21-dian/signature"
 	"github.com/diegofxm/ubl21-dian/soap"
+	"github.com/diegofxm/ubl21-dian/soap/types"
 )
 
 type InvoiceService struct {
@@ -451,11 +452,11 @@ func (s *InvoiceService) SendToDIAN(id int64, userID int64) error {
 	zipBase64 := base64.StdEncoding.EncodeToString(zipData)
 
 	// 7. Determinar ambiente DIAN
-	var environment soap.Environment
+	var environment types.Environment
 	if invoice.Software.Environment == "1" {
-		environment = soap.Produccion
+		environment = types.Produccion
 	} else {
-		environment = soap.Habilitacion
+		environment = types.Habilitacion
 	}
 
 	// 8. Obtener certificado para SOAP security header
@@ -480,7 +481,7 @@ func (s *InvoiceService) SendToDIAN(id int64, userID int64) error {
 	}
 
 	// 9. Crear cliente SOAP
-	config := &soap.Config{
+	config := &types.Config{
 		Environment: environment,
 		Certificate: clientPemPath,
 		PrivateKey:  clientPemPath,
@@ -491,10 +492,10 @@ func (s *InvoiceService) SendToDIAN(id int64, userID int64) error {
 	}
 	
 	// 10. Preparar request para DIAN según ambiente
-	var response *soap.Response
+	var response *types.Response
 	
-	if environment == "2" && invoice.Software.TestSetID != nil && *invoice.Software.TestSetID != "" {
-		testSetRequest := &soap.SendTestSetAsyncRequest{
+	if environment == types.Habilitacion && invoice.Software.TestSetID != nil && *invoice.Software.TestSetID != "" {
+		testSetRequest := &types.SendTestSetAsyncRequest{
 			FileName:    fmt.Sprintf("FES-%s.zip", invoice.Number),
 			ContentFile: zipBase64,
 			TestSetId:   *invoice.Software.TestSetID,
@@ -505,7 +506,7 @@ func (s *InvoiceService) SendToDIAN(id int64, userID int64) error {
 		}
 		response = &testSetResponse.Response
 	} else {
-		syncRequest := &soap.SendBillSyncRequest{
+		syncRequest := &types.SendBillSyncRequest{
 			FileName:    fmt.Sprintf("FES-%s.zip", invoice.Number),
 			ContentFile: zipBase64,
 		}
