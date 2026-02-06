@@ -1,0 +1,44 @@
+version: "1.0"
+name: create_organization_types
+description: "Tipos de organización según DIAN"
+
+up:
+  - type: create_table
+    table: organization_types
+    columns:
+      - name: id
+        type: SERIAL
+        primary_key: true
+      - name: code
+        type: VARCHAR(5)
+        nullable: false
+        unique: true
+      - name: name
+        type: VARCHAR(100)
+        nullable: false
+      - name: description
+        type: TEXT
+      - name: is_active
+        type: BOOLEAN
+        default: true
+        nullable: false
+      - name: created_at
+        type: TIMESTAMPTZ
+        default: NOW()
+        nullable: false
+      - name: updated_at
+        type: TIMESTAMPTZ
+        default: NOW()
+        nullable: false
+    
+    indexes:
+      - name: idx_organization_types_code
+        columns: [code]
+        where: "is_active = true"
+    
+    comment: "Tipos de organización según DIAN (AdditionalAccountID en UBL)"
+
+down:
+  - type: drop_table
+    table: organization_types
+    cascade: true

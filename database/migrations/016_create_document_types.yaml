@@ -1,0 +1,49 @@
+version: "1.0"
+name: create_document_types
+description: "Tipos de documento de identificación según DIAN"
+
+up:
+  - type: create_table
+    table: document_types
+    columns:
+      - name: id
+        type: SERIAL
+        primary_key: true
+      - name: code
+        type: VARCHAR(10)
+        nullable: false
+        unique: true
+      - name: name
+        type: VARCHAR(100)
+        nullable: false
+      - name: description
+        type: TEXT
+      - name: is_active
+        type: BOOLEAN
+        default: true
+        nullable: false
+      - name: created_at
+        type: TIMESTAMPTZ
+        default: NOW()
+        nullable: false
+      - name: updated_at
+        type: TIMESTAMPTZ
+        default: NOW()
+        nullable: false
+    
+    constraints:
+      - type: check
+        name: chk_document_types_code
+        expression: "code ~ '^[0-9]{1,2}$'"
+    
+    indexes:
+      - name: idx_document_types_code
+        columns: [code]
+        where: "is_active = true"
+    
+    comment: "Catálogo de tipos de documento según DIAN (schemeID en UBL)"
+
+down:
+  - type: drop_table
+    table: document_types
+    cascade: true

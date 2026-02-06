@@ -1,0 +1,227 @@
+version: "1.0"
+name: create_documents
+description: "Documentos electrónicos: facturas, notas crédito/débito"
+
+up:
+  - type: create_sequence
+    name: documents_id_seq
+
+  - type: create_table
+    table: documents
+    columns:
+      - name: id
+        type: BIGINT
+        default: "nextval('documents_id_seq')"
+        nullable: false
+        primary_key: true
+      - name: company_id
+        type: BIGINT
+        nullable: false
+      - name: customer_id
+        type: BIGINT
+        nullable: false
+      - name: resolution_id
+        type: BIGINT
+        nullable: false
+      - name: number
+        type: VARCHAR(50)
+        nullable: false
+      - name: consecutive
+        type: BIGINT
+        nullable: false
+      - name: uuid
+        type: VARCHAR(255)
+        nullable: true
+      - name: issue_date
+        type: TIMESTAMPTZ
+        nullable: false
+      - name: issue_time
+        type: TIMESTAMPTZ
+        nullable: false
+      - name: due_date
+        type: TIMESTAMPTZ
+        nullable: true
+      - name: type_document_id
+        type: INTEGER
+        nullable: false
+      - name: currency_code_id
+        type: INTEGER
+        nullable: false
+      - name: billing_reference_id
+        type: BIGINT
+        nullable: true
+      - name: credit_note_concept_id
+        type: INTEGER
+        nullable: true
+      - name: debit_note_concept_id
+        type: INTEGER
+        nullable: true
+      - name: notes
+        type: TEXT
+      - name: payment_method_id
+        type: INTEGER
+      - name: payment_form_id
+        type: INTEGER
+      - name: subtotal
+        type: NUMERIC(15,2)
+        nullable: false
+      - name: tax_total
+        type: NUMERIC(15,2)
+        nullable: false
+      - name: total
+        type: NUMERIC(15,2)
+        nullable: false
+      - name: xml_path
+        type: TEXT
+        nullable: true
+      - name: pdf_path
+        type: TEXT
+        nullable: true
+      - name: zip_path
+        type: TEXT
+        nullable: true
+      - name: qr_code_url
+        type: TEXT
+        nullable: true
+      - name: track_id
+        type: VARCHAR(255)
+        nullable: true
+      - name: status
+        type: VARCHAR(20)
+        default: "'draft'"
+        nullable: false
+      - name: dian_status
+        type: VARCHAR(50)
+        nullable: true
+      - name: dian_response
+        type: TEXT
+        nullable: true
+      - name: dian_status_code
+        type: VARCHAR(10)
+        nullable: true
+      - name: dian_status_description
+        type: TEXT
+        nullable: true
+      - name: sent_to_dian_at
+        type: TIMESTAMPTZ
+        nullable: true
+      - name: accepted_by_dian_at
+        type: TIMESTAMPTZ
+        nullable: true
+      - name: created_at
+        type: TIMESTAMPTZ
+        default: NOW()
+        nullable: false
+      - name: updated_at
+        type: TIMESTAMPTZ
+        default: NOW()
+        nullable: false
+    
+    foreign_keys:
+      - name: fk_documents_company
+        column: company_id
+        references:
+          table: companies
+          column: id
+        on_delete: CASCADE
+      - name: fk_documents_customer
+        column: customer_id
+        references:
+          table: customers
+          column: id
+        on_delete: RESTRICT
+      - name: fk_documents_resolution
+        column: resolution_id
+        references:
+          table: resolutions
+          column: id
+        on_delete: RESTRICT
+      - name: fk_documents_type_document
+        column: type_document_id
+        references:
+          table: invoice_type_codes
+          column: id
+        on_delete: RESTRICT
+      - name: fk_documents_currency_code
+        column: currency_code_id
+        references:
+          table: currency_codes
+          column: id
+        on_delete: RESTRICT
+      - name: fk_documents_billing_reference
+        column: billing_reference_id
+        references:
+          table: documents
+          column: id
+        on_delete: SET NULL
+      - name: fk_documents_credit_note_concept
+        column: credit_note_concept_id
+        references:
+          table: credit_note_concepts
+          column: id
+        on_delete: RESTRICT
+      - name: fk_documents_debit_note_concept
+        column: debit_note_concept_id
+        references:
+          table: debit_note_concepts
+          column: id
+        on_delete: RESTRICT
+      - name: fk_documents_payment_method
+        column: payment_method_id
+        references:
+          table: payment_methods
+          column: id
+        on_delete: SET NULL
+      - name: fk_documents_payment_form
+        column: payment_form_id
+        references:
+          table: payment_forms
+          column: id
+        on_delete: SET NULL
+    
+    constraints:
+      - type: unique
+        name: uq_documents_number
+        columns: [number]
+      - type: unique
+        name: uq_documents_company_consecutive
+        columns: [company_id, consecutive]
+      - type: check
+        name: chk_documents_status
+        expression: "status IN ('draft', 'signed', 'sent', 'accepted', 'rejected', 'cancelled')"
+      - type: check
+        name: chk_documents_totals
+        expression: "total = subtotal + tax_total"
+      - type: check
+        name: chk_documents_amounts
+        expression: "subtotal >= 0 AND tax_total >= 0 AND total >= 0"
+    
+    indexes:
+      - name: idx_documents_number
+        columns: [number]
+        unique: true
+      - name: idx_documents_company_id
+        columns: [company_id]
+      - name: idx_documents_customer_id
+        columns: [customer_id]
+      - name: idx_documents_resolution_id
+        columns: [resolution_id]
+      - name: idx_documents_billing_reference_id
+        columns: [billing_reference_id]
+        where: "billing_reference_id IS NOT NULL"
+      - name: idx_documents_uuid
+        columns: [uuid]
+        where: "uuid IS NOT NULL"
+      - name: idx_documents_track_id
+        columns: [track_id]
+        where: "track_id IS NOT NULL"
+    
+    comment: "Documentos electrónicos DIAN: facturas (01), notas crédito (91), notas débito (92)"
+
+down:
+  - type: drop_table
+    table: documents
+    cascade: true
+  - type: drop_sequence
+    name: documents_id_seq
+    cascade: true

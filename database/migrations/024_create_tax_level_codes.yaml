@@ -1,0 +1,44 @@
+version: "1.0"
+name: create_tax_level_codes
+description: "Códigos de responsabilidad fiscal según DIAN"
+
+up:
+  - type: create_table
+    table: tax_level_codes
+    columns:
+      - name: id
+        type: SERIAL
+        primary_key: true
+      - name: code
+        type: VARCHAR(10)
+        nullable: false
+        unique: true
+      - name: name
+        type: VARCHAR(255)
+        nullable: false
+      - name: description
+        type: TEXT
+      - name: is_active
+        type: BOOLEAN
+        default: true
+        nullable: false
+      - name: created_at
+        type: TIMESTAMPTZ
+        default: NOW()
+        nullable: false
+      - name: updated_at
+        type: TIMESTAMPTZ
+        default: NOW()
+        nullable: false
+    
+    indexes:
+      - name: idx_tax_level_codes_code
+        columns: [code]
+        where: "is_active = true"
+    
+    comment: "Catálogo de responsabilidades fiscales DIAN (TaxLevelCode en UBL)"
+
+down:
+  - type: drop_table
+    table: tax_level_codes
+    cascade: true

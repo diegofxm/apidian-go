@@ -1,0 +1,7 @@
+code,name,description,is_active
+01,Factura de venta,Factura electrónica de venta,true
+02,Factura de exportación,Factura electrónica de exportación,true
+03,Factura por contingencia,Factura electrónica por contingencia facturador,true
+04,Factura de importación,Factura electrónica de importación,true
+91,Nota crédito,Nota crédito electrónica,true
+92,Nota débito,Nota débito electrónica,true

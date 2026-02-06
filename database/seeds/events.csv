@@ -1,0 +1,7 @@
+code,name,description,is_active
+030,Acuse de recibo de factura electrónica de venta,Acuse de recibo de factura electrónica de venta,true
+031,Reclamo de la factura electrónica de venta,Reclamo de la factura electrónica de venta,true
+032,Recibo del bien y/o prestación del servicio,Recibo del bien y/o prestación del servicio,true
+033,Aceptación expresa,Aceptación expresa,true
+034,Aceptación tácita,Aceptación tácita,true
+036,Rechazo factura electrónica de venta,Rechazo factura electrónica de venta,true

@@ -1,0 +1,21 @@
+code,name,is_active
+CO,Colombia,true
+US,Estados Unidos,true
+MX,México,true
+BR,Brasil,true
+AR,Argentina,true
+CL,Chile,true
+PE,Perú,true
+EC,Ecuador,true
+VE,Venezuela,true
+PA,Panamá,true
+CR,Costa Rica,true
+ES,España,true
+FR,Francia,true
+DE,Alemania,true
+IT,Italia,true
+GB,Reino Unido,true
+CN,China,true
+JP,Japón,true
+CA,Canadá,true
+AU,Australia,true

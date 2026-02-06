@@ -1,0 +1,40 @@
+version: "1.0"
+name: create_audit_log
+description: "Tabla de auditoría para todas las operaciones críticas"
+
+up:
+  - type: create_table
+    table: audit_log
+    columns:
+      - name: id
+        type: BIGSERIAL
+        primary_key: true
+      - name: table_name
+        type: VARCHAR(100)
+        nullable: false
+      - name: operation
+        type: VARCHAR(10)
+        nullable: false
+      - name: user_id
+        type: BIGINT
+      - name: old_data
+        type: JSONB
+      - name: new_data
+        type: JSONB
+      - name: changed_at
+        type: TIMESTAMPTZ
+        default: NOW()
+        nullable: false
+    
+    indexes:
+      - name: idx_audit_log_table_name
+        columns: [table_name]
+      - name: idx_audit_log_changed_at
+        columns: [changed_at]
+    
+    comment: "Registro de auditoría para todas las operaciones críticas"
+
+down:
+  - type: drop_table
+    table: audit_log
+    cascade: true

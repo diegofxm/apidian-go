@@ -1,0 +1,10 @@
+code,name,symbol,is_active
+COP,Peso colombiano,$,true
+USD,Dólar estadounidense,$,true
+EUR,Euro,€,true
+GBP,Libra esterlina,£,true
+MXN,Peso mexicano,$,true
+BRL,Real brasileño,R$,true
+ARS,Peso argentino,$,true
+CLP,Peso chileno,$,true
+PEN,Sol peruano,S/,true

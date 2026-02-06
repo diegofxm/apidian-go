@@ -1,0 +1,169 @@
+version: "1.0"
+name: create_functions
+description: "Funciones y triggers de validación de negocio"
+
+up:
+  - type: raw_sql
+    sql: |
+      CREATE OR REPLACE FUNCTION validate_resolution_range()
+      RETURNS TRIGGER AS $$
+      BEGIN
+          IF NEW.current_number > NEW.to_number THEN
+              RAISE EXCEPTION 'El consecutivo actual (%) excede el rango autorizado (% - %)', 
+                  NEW.current_number, NEW.from_number, NEW.to_number;
+          END IF;
+          RETURN NEW;
+      END;
+      $$ LANGUAGE plpgsql;
+
+  - type: create_trigger
+    name: trg_resolutions_validate_range
+    table: resolutions
+    timing: BEFORE
+    event: INSERT OR UPDATE
+    function: validate_resolution_range()
+
+  - type: raw_sql
+    sql: |
+      CREATE OR REPLACE FUNCTION auto_increment_document_consecutive()
+      RETURNS TRIGGER AS $$
+      DECLARE
+          v_resolution_record RECORD;
+      BEGIN
+          SELECT id, prefix, current_number, to_number
+          INTO v_resolution_record
+          FROM resolutions
+          WHERE id = NEW.resolution_id
+            AND is_active = true;
+          
+          IF NOT FOUND THEN
+              RAISE EXCEPTION 'Resolución no encontrada o inactiva';
+          END IF;
+          
+          IF v_resolution_record.current_number >= v_resolution_record.to_number THEN
+              RAISE EXCEPTION 'Se ha agotado la numeración autorizada. Consecutivo actual: %, Máximo: %',
+                  v_resolution_record.current_number, v_resolution_record.to_number;
+          END IF;
+          
+          IF TG_OP = 'INSERT' AND NEW.consecutive IS NULL THEN
+              NEW.consecutive = v_resolution_record.current_number + 1;
+              NEW.number = CONCAT(v_resolution_record.prefix, NEW.consecutive);
+              
+              UPDATE resolutions
+              SET current_number = NEW.consecutive
+              WHERE id = v_resolution_record.id;
+          END IF;
+          
+          RETURN NEW;
+      END;
+      $$ LANGUAGE plpgsql;
+
+  - type: create_trigger
+    name: trg_documents_auto_consecutive
+    table: documents
+    timing: BEFORE
+    event: INSERT
+    function: auto_increment_document_consecutive()
+
+  - type: raw_sql
+    sql: |
+      CREATE OR REPLACE FUNCTION validate_document_totals()
+      RETURNS TRIGGER AS $$
+      DECLARE
+          v_calculated_subtotal NUMERIC(15,2);
+          v_calculated_tax NUMERIC(15,2);
+          v_calculated_total NUMERIC(15,2);
+      BEGIN
+          SELECT 
+              COALESCE(SUM(line_total), 0),
+              COALESCE(SUM(tax_amount), 0)
+          INTO v_calculated_subtotal, v_calculated_tax
+          FROM document_lines
+          WHERE document_id = NEW.id;
+          
+          v_calculated_total = v_calculated_subtotal + v_calculated_tax;
+          
+          IF ABS(NEW.subtotal - v_calculated_subtotal) > 0.01 THEN
+              RAISE EXCEPTION 'El subtotal (%) no coincide con la suma de líneas (%)',
+                  NEW.subtotal, v_calculated_subtotal;
+          END IF;
+          
+          IF ABS(NEW.tax_total - v_calculated_tax) > 0.01 THEN
+              RAISE EXCEPTION 'El total de impuestos (%) no coincide con la suma de líneas (%)',
+                  NEW.tax_total, v_calculated_tax;
+          END IF;
+          
+          RETURN NEW;
+      END;
+      $$ LANGUAGE plpgsql;
+
+  # Trigger deshabilitado temporalmente - la validación se hace en el service layer
+  # - type: create_trigger
+  #   name: trg_documents_validate_totals
+  #   table: documents
+  #   timing: AFTER
+  #   event: UPDATE OF subtotal, tax_total, total
+  #   function: validate_document_totals()
+  #   for_each: ROW
+
+  - type: raw_sql
+    sql: |
+      CREATE OR REPLACE FUNCTION get_next_invoice_consecutive(p_company_id BIGINT, p_type_document_id INTEGER)
+      RETURNS BIGINT AS $$
+      DECLARE
+          v_next_consecutive BIGINT;
+      BEGIN
+          SELECT current_number + 1
+          INTO v_next_consecutive
+          FROM resolutions
+          WHERE company_id = p_company_id
+            AND type_document_id = p_type_document_id
+            AND is_active = true
+          ORDER BY id DESC
+          LIMIT 1;
+          
+          RETURN v_next_consecutive;
+      END;
+      $$ LANGUAGE plpgsql;
+
+  - type: raw_sql
+    sql: |
+      CREATE OR REPLACE FUNCTION is_consecutive_available(p_company_id BIGINT, p_type_document_id INTEGER, p_consecutive BIGINT)
+      RETURNS BOOLEAN AS $$
+      DECLARE
+          v_is_available BOOLEAN;
+      BEGIN
+          SELECT p_consecutive BETWEEN from_number AND to_number
+              AND p_consecutive > current_number
+          INTO v_is_available
+          FROM resolutions
+          WHERE company_id = p_company_id
+            AND type_document_id = p_type_document_id
+            AND is_active = true
+          ORDER BY id DESC
+          LIMIT 1;
+          
+          RETURN COALESCE(v_is_available, false);
+      END;
+      $$ LANGUAGE plpgsql;
+
+down:
+  - type: drop_trigger
+    name: trg_documents_validate_totals
+    table: documents
+  - type: drop_trigger
+    name: trg_documents_auto_consecutive
+    table: documents
+  - type: drop_trigger
+    name: trg_resolutions_validate_range
+    table: resolutions
+  - type: raw_sql
+    sql: "DROP FUNCTION IF EXISTS is_consecutive_available(BIGINT, INTEGER, BIGINT) CASCADE;"
+  - type: raw_sql
+    sql: "DROP FUNCTION IF EXISTS get_next_invoice_consecutive(BIGINT, INTEGER) CASCADE;"
+  - type: raw_sql
+    sql: "DROP FUNCTION IF EXISTS validate_document_totals() CASCADE;"
+  - type: raw_sql
+    sql: "DROP FUNCTION IF EXISTS auto_increment_document_consecutive() CASCADE;"
+  - type: raw_sql
+    sql: "DROP FUNCTION IF EXISTS validate_resolution_range() CASCADE;"

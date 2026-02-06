@@ -1,0 +1,78 @@
+version: "1.0"
+name: create_application_responses
+description: "Respuestas de aplicación DIAN: acuses, aceptaciones, rechazos"
+
+up:
+  - type: create_sequence
+    name: application_responses_id_seq
+
+  - type: create_table
+    table: application_responses
+    columns:
+      - name: id
+        type: BIGINT
+        default: "nextval('application_responses_id_seq')"
+        nullable: false
+        primary_key: true
+      - name: document_id
+        type: BIGINT
+        nullable: false
+      - name: event_id
+        type: INTEGER
+        nullable: false
+      - name: rejection_type_id
+        type: INTEGER
+      - name: response_code
+        type: VARCHAR(10)
+      - name: response_date
+        type: TIMESTAMPTZ
+        nullable: false
+      - name: notes
+        type: TEXT
+      - name: xml_path
+        type: TEXT
+      - name: created_at
+        type: TIMESTAMPTZ
+        default: NOW()
+        nullable: false
+    
+    foreign_keys:
+      - name: fk_application_responses_document
+        column: document_id
+        references:
+          table: documents
+          column: id
+        on_delete: CASCADE
+      - name: fk_application_responses_event
+        column: event_id
+        references:
+          table: events
+          column: id
+        on_delete: RESTRICT
+      - name: fk_application_responses_rejection
+        column: rejection_type_id
+        references:
+          table: rejection_types
+          column: id
+        on_delete: RESTRICT
+    
+    indexes:
+      - name: idx_application_responses_document_id
+        columns: [document_id]
+      - name: idx_application_responses_event_id
+        columns: [event_id]
+      - name: idx_application_responses_response_date
+        columns: [response_date]
+      - name: idx_application_responses_rejection_type_id
+        columns: [rejection_type_id]
+        where: "rejection_type_id IS NOT NULL"
+    
+    comment: "Respuestas de aplicación DIAN: acuses, aceptaciones, rechazos (ApplicationResponse en UBL)"
+
+down:
+  - type: drop_table
+    table: application_responses
+    cascade: true
+  - type: drop_sequence
+    name: application_responses_id_seq
+    cascade: true

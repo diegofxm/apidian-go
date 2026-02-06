@@ -1,0 +1,63 @@
+version: "1.0"
+name: create_municipalities
+description: "Municipios de Colombia según DANE"
+
+up:
+  - type: create_table
+    table: municipalities
+    columns:
+      - name: id
+        type: SERIAL
+        primary_key: true
+      - name: code
+        type: VARCHAR(5)
+        nullable: false
+        unique: true
+      - name: name
+        type: VARCHAR(100)
+        nullable: false
+      - name: department_id
+        type: INTEGER
+        nullable: false
+      - name: is_active
+        type: BOOLEAN
+        default: true
+        nullable: false
+      - name: created_at
+        type: TIMESTAMPTZ
+        default: NOW()
+        nullable: false
+      - name: updated_at
+        type: TIMESTAMPTZ
+        default: NOW()
+        nullable: false
+    
+    foreign_keys:
+      - name: fk_municipalities_department
+        column: department_id
+        references:
+          table: departments
+          column: id
+        on_delete: RESTRICT
+    
+    constraints:
+      - type: check
+        name: chk_municipalities_code
+        expression: "code ~ '^[0-9]{5}$'"
+    
+    indexes:
+      - name: idx_municipalities_code
+        columns: [code]
+        unique: true
+        where: "is_active = true"
+      - name: idx_municipalities_department_id
+        columns: [department_id]
+      - name: idx_municipalities_name_trgm
+        columns: [name]
+    
+    comment: "Municipios de Colombia según DANE (CityName en UBL)"
+
+down:
+  - type: drop_table
+    table: municipalities
+    cascade: true

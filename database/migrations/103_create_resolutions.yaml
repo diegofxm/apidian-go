@@ -1,0 +1,102 @@
+version: "1.0"
+name: create_resolutions
+description: "Resoluciones de numeración DIAN por empresa"
+
+up:
+  - type: create_sequence
+    name: resolutions_id_seq
+
+  - type: create_table
+    table: resolutions
+    columns:
+      - name: id
+        type: BIGINT
+        default: "nextval('resolutions_id_seq')"
+        nullable: false
+        primary_key: true
+      - name: company_id
+        type: BIGINT
+        nullable: false
+      - name: type_document_id
+        type: INTEGER
+        nullable: false
+      - name: prefix
+        type: VARCHAR(10)
+        nullable: false
+      - name: resolution
+        type: VARCHAR(50)
+        nullable: false
+      - name: technical_key
+        type: TEXT
+      - name: from_number
+        type: BIGINT
+        nullable: false
+      - name: to_number
+        type: BIGINT
+        nullable: false
+      - name: current_number
+        type: BIGINT
+        nullable: false
+      - name: date_from
+        type: DATE
+        nullable: false
+      - name: date_to
+        type: DATE
+        nullable: false
+      - name: is_active
+        type: BOOLEAN
+        default: true
+        nullable: false
+      - name: created_at
+        type: TIMESTAMPTZ
+        default: NOW()
+        nullable: false
+      - name: updated_at
+        type: TIMESTAMPTZ
+        default: NOW()
+        nullable: false
+    
+    foreign_keys:
+      - name: fk_resolutions_company
+        column: company_id
+        references:
+          table: companies
+          column: id
+        on_delete: CASCADE
+      - name: fk_resolutions_type_document
+        column: type_document_id
+        references:
+          table: invoice_type_codes
+          column: id
+        on_delete: RESTRICT
+    
+    constraints:
+      - type: unique
+        name: uq_resolutions_company_prefix
+        columns: [company_id, prefix]
+      - type: check
+        name: chk_resolutions_range
+        expression: "from_number <= to_number"
+      - type: check
+        name: chk_resolutions_current
+        expression: "current_number >= from_number AND current_number <= to_number"
+      - type: check
+        name: chk_resolutions_dates
+        expression: "date_from <= date_to"
+    
+    indexes:
+      - name: idx_resolutions_company_id
+        columns: [company_id]
+        where: "is_active = true"
+      - name: idx_resolutions_type_document_id
+        columns: [type_document_id]
+    
+    comment: "Resoluciones de numeración DIAN por empresa y tipo de documento"
+
+down:
+  - type: drop_table
+    table: resolutions
+    cascade: true
+  - type: drop_sequence
+    name: resolutions_id_seq
+    cascade: true

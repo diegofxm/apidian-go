@@ -1,0 +1,62 @@
+version: "1.0"
+name: create_users
+description: "Usuarios del sistema para autenticación y autorización"
+
+up:
+  - type: create_sequence
+    name: users_id_seq
+
+  - type: create_table
+    table: users
+    columns:
+      - name: id
+        type: BIGINT
+        default: "nextval('users_id_seq')"
+        nullable: false
+        primary_key: true
+      - name: name
+        type: VARCHAR(255)
+        nullable: false
+      - name: email
+        type: VARCHAR(255)
+        nullable: false
+        unique: true
+      - name: email_verified_at
+        type: TIMESTAMPTZ
+        nullable: true
+      - name: password
+        type: VARCHAR(255)
+        nullable: false
+      - name: is_active
+        type: BOOLEAN
+        default: true
+        nullable: false
+      - name: created_at
+        type: TIMESTAMPTZ
+        default: NOW()
+        nullable: false
+      - name: updated_at
+        type: TIMESTAMPTZ
+        default: NOW()
+        nullable: false
+    
+    constraints:
+      - type: check
+        name: chk_users_email
+        expression: "email ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}$'"
+    
+    indexes:
+      - name: idx_users_email
+        columns: [email]
+        unique: true
+        where: "is_active = true"
+    
+    comment: "Usuarios del sistema para autenticación y autorización"
+
+down:
+  - type: drop_table
+    table: users
+    cascade: true
+  - type: drop_sequence
+    name: users_id_seq
+    cascade: true

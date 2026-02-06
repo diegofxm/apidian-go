@@ -1,0 +1,6 @@
+code,name,description,is_active
+01,IVA,Impuesto sobre las ventas,true
+02,IC,Impuesto al consumo,true
+03,ICA,Impuesto de industria y comercio,true
+04,INC,Impuesto nacional al consumo,true
+ZZ,No causa,No causa impuesto,true

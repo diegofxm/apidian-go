@@ -1,0 +1,68 @@
+version: "1.0"
+name: create_triggers
+description: "Triggers para auditoría y validaciones automáticas"
+
+up:
+  - type: raw_sql
+    sql: |
+      CREATE OR REPLACE FUNCTION update_updated_at_column()
+      RETURNS TRIGGER AS $$
+      BEGIN
+          NEW.updated_at = NOW();
+          RETURN NEW;
+      END;
+      $$ LANGUAGE plpgsql;
+
+  - type: create_trigger
+    name: trg_users_updated_at
+    table: users
+    timing: BEFORE
+    event: UPDATE
+    function: update_updated_at_column()
+
+  - type: create_trigger
+    name: trg_companies_updated_at
+    table: companies
+    timing: BEFORE
+    event: UPDATE
+    function: update_updated_at_column()
+
+  - type: create_trigger
+    name: trg_customers_updated_at
+    table: customers
+    timing: BEFORE
+    event: UPDATE
+    function: update_updated_at_column()
+
+  - type: create_trigger
+    name: trg_products_updated_at
+    table: products
+    timing: BEFORE
+    event: UPDATE
+    function: update_updated_at_column()
+
+  - type: create_trigger
+    name: trg_documents_updated_at
+    table: documents
+    timing: BEFORE
+    event: UPDATE
+    function: update_updated_at_column()
+
+down:
+  - type: drop_trigger
+    name: trg_documents_updated_at
+    table: documents
+  - type: drop_trigger
+    name: trg_products_updated_at
+    table: products
+  - type: drop_trigger
+    name: trg_customers_updated_at
+    table: customers
+  - type: drop_trigger
+    name: trg_companies_updated_at
+    table: companies
+  - type: drop_trigger
+    name: trg_users_updated_at
+    table: users
+  - type: raw_sql
+    sql: "DROP FUNCTION IF EXISTS update_updated_at_column() CASCADE;"

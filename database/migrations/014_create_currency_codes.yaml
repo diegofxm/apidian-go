@@ -1,0 +1,50 @@
+version: "1.0"
+name: create_currency_codes
+description: "Códigos de moneda según ISO 4217"
+
+up:
+  - type: create_table
+    table: currency_codes
+    columns:
+      - name: id
+        type: SERIAL
+        primary_key: true
+      - name: code
+        type: VARCHAR(3)
+        nullable: false
+        unique: true
+      - name: name
+        type: VARCHAR(100)
+        nullable: false
+      - name: symbol
+        type: VARCHAR(10)
+      - name: is_active
+        type: BOOLEAN
+        default: true
+        nullable: false
+      - name: created_at
+        type: TIMESTAMPTZ
+        default: NOW()
+        nullable: false
+      - name: updated_at
+        type: TIMESTAMPTZ
+        default: NOW()
+        nullable: false
+    
+    constraints:
+      - type: check
+        name: chk_currency_codes_code
+        expression: "code ~ '^[A-Z]{3}$'"
+    
+    indexes:
+      - name: idx_currency_codes_code
+        columns: [code]
+        unique: true
+        where: "is_active = true"
+    
+    comment: "Códigos de moneda ISO 4217 (DocumentCurrencyCode en UBL)"
+
+down:
+  - type: drop_table
+    table: currency_codes
+    cascade: true

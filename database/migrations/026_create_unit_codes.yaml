@@ -1,0 +1,44 @@
+version: "1.0"
+name: create_unit_codes
+description: "Unidades de medida según UN/CEFACT"
+
+up:
+  - type: create_table
+    table: unit_codes
+    columns:
+      - name: id
+        type: SERIAL
+        primary_key: true
+      - name: code
+        type: VARCHAR(10)
+        nullable: false
+        unique: true
+      - name: name
+        type: VARCHAR(100)
+        nullable: false
+      - name: description
+        type: TEXT
+      - name: is_active
+        type: BOOLEAN
+        default: true
+        nullable: false
+      - name: created_at
+        type: TIMESTAMPTZ
+        default: NOW()
+        nullable: false
+      - name: updated_at
+        type: TIMESTAMPTZ
+        default: NOW()
+        nullable: false
+    
+    indexes:
+      - name: idx_unit_codes_code
+        columns: [code]
+        where: "is_active = true"
+    
+    comment: "Unidades de medida UN/CEFACT Recommendation 20 (unitCode en UBL)"
+
+down:
+  - type: drop_table
+    table: unit_codes
+    cascade: true

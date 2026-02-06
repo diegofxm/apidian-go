@@ -1,0 +1,44 @@
+version: "1.0"
+name: create_tax_types
+description: "Tipos de impuestos según DIAN"
+
+up:
+  - type: create_table
+    table: tax_types
+    columns:
+      - name: id
+        type: SERIAL
+        primary_key: true
+      - name: code
+        type: VARCHAR(5)
+        nullable: false
+        unique: true
+      - name: name
+        type: VARCHAR(100)
+        nullable: false
+      - name: description
+        type: TEXT
+      - name: is_active
+        type: BOOLEAN
+        default: true
+        nullable: false
+      - name: created_at
+        type: TIMESTAMPTZ
+        default: NOW()
+        nullable: false
+      - name: updated_at
+        type: TIMESTAMPTZ
+        default: NOW()
+        nullable: false
+    
+    indexes:
+      - name: idx_tax_types_code
+        columns: [code]
+        where: "is_active = true"
+    
+    comment: "Tipos de impuestos DIAN: 01=IVA, 02=Consumo, 03=ICA, etc. (TaxScheme/ID en UBL)"
+
+down:
+  - type: drop_table
+    table: tax_types
+    cascade: true

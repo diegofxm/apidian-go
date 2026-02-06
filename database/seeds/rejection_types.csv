@@ -1,0 +1,5 @@
+code,name,description,is_active
+01,Documento con inconsistencias,Documento con inconsistencias,true
+02,Mercancía no entregada totalmente,Mercancía no entregada totalmente,true
+03,Mercancía no entregada parcialmente,Mercancía no entregada parcialmente,true
+04,Servicio no prestado,Servicio no prestado,true

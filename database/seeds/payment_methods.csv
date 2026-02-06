@@ -1,0 +1,11 @@
+code,name,description,is_active
+1,Instrumento no definido,Instrumento no definido,true
+2,Crédito ACH,Crédito ACH,true
+10,Efectivo,Efectivo,true
+20,Cheque,Cheque,true
+30,Transferencia débito bancaria,Transferencia débito bancaria,true
+31,Débito de cuenta bancaria,Débito de cuenta bancaria,true
+42,Pago a cuenta bancaria,Pago a cuenta bancaria,true
+47,Pago mediante transferencia bancaria,Pago mediante transferencia bancaria,true
+48,Tarjeta de crédito,Tarjeta de crédito,true
+49,Tarjeta débito,Tarjeta débito,true

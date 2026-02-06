@@ -1,0 +1,61 @@
+version: "1.0"
+name: create_departments
+description: "Departamentos de Colombia según DANE"
+
+up:
+  - type: create_table
+    table: departments
+    columns:
+      - name: id
+        type: SERIAL
+        primary_key: true
+      - name: code
+        type: VARCHAR(2)
+        nullable: false
+        unique: true
+      - name: name
+        type: VARCHAR(100)
+        nullable: false
+      - name: country_id
+        type: INTEGER
+        nullable: false
+      - name: is_active
+        type: BOOLEAN
+        default: true
+        nullable: false
+      - name: created_at
+        type: TIMESTAMPTZ
+        default: NOW()
+        nullable: false
+      - name: updated_at
+        type: TIMESTAMPTZ
+        default: NOW()
+        nullable: false
+    
+    foreign_keys:
+      - name: fk_departments_country
+        column: country_id
+        references:
+          table: countries
+          column: id
+        on_delete: RESTRICT
+    
+    constraints:
+      - type: check
+        name: chk_departments_code
+        expression: "code ~ '^[0-9]{2}$'"
+    
+    indexes:
+      - name: idx_departments_code
+        columns: [code]
+        unique: true
+        where: "is_active = true"
+      - name: idx_departments_country_id
+        columns: [country_id]
+    
+    comment: "Departamentos de Colombia según DANE (CountrySubentity en UBL)"
+
+down:
+  - type: drop_table
+    table: departments
+    cascade: true

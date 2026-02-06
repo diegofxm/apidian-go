@@ -1,0 +1,72 @@
+# Librerías externas / submódulos
+ubl21-dian/
+
+test_*.go
+!scripts/*.go
+# soap_request_debug.xml
+
+# Binarios compilados
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+bin/
+dist/
+# *.p12
+# *.pem
+
+# Archivos de test
+*.test
+*.out
+coverage.txt
+coverage.html
+
+# Dependencias Go
+vendor/
+
+# Variables de entorno
+.env
+.env.local
+.env.*.local
+
+# IDEs
+.vscode/
+.idea/
+
+# Storage - Archivos privados de la aplicación
+storage/app/*
+storage/logs/*
+
+# Mantener estructura de carpetas y assets
+!storage/app/.gitkeep
+!storage/app/assets/
+!storage/app/assets/**
+!storage/logs/.gitkeep
+!storage/logs/debug/
+storage/logs/debug/*
+!storage/logs/debug/.gitkeep
+
+# Archivos públicos estáticos (assets como logo por defecto)
+!storage/public/
+!storage/public/assets/
+!storage/public/assets/**
+
+# Archivos temporales
+tmp/
+temp/
+*.tmp
+
+# Archivos de debug
+# *_debug.xml
+# soap_*.xml
+
+# Logs
+*.log
+logs/
+
+# Archivos de texto temporal
+*.swp
+*.swo
+*~
+.DS_Store

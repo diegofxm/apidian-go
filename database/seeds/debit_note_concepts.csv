@@ -1,0 +1,5 @@
+code,name,description,is_active
+1,Intereses,Intereses,true
+2,Gastos por cobrar,Gastos por cobrar,true
+3,Cambio del valor,Cambio del valor,true
+4,Otros,Otros conceptos de nota débito,true

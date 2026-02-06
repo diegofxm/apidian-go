@@ -1,0 +1,71 @@
+version: "1.0"
+name: create_software
+description: "Configuración del software DIAN por empresa"
+
+up:
+  - type: create_sequence
+    name: software_id_seq
+
+  - type: create_table
+    table: software
+    columns:
+      - name: id
+        type: BIGINT
+        default: "nextval('software_id_seq')"
+        nullable: false
+        primary_key: true
+      - name: company_id
+        type: BIGINT
+        nullable: false
+        unique: true
+      - name: identifier
+        type: VARCHAR(255)
+        nullable: false
+      - name: pin
+        type: VARCHAR(10)
+        nullable: false
+      - name: environment
+        type: VARCHAR(1)
+        nullable: false
+      - name: test_set_id
+        type: VARCHAR(255)
+      - name: is_active
+        type: BOOLEAN
+        default: true
+        nullable: false
+      - name: created_at
+        type: TIMESTAMPTZ
+        default: NOW()
+        nullable: false
+      - name: updated_at
+        type: TIMESTAMPTZ
+        default: NOW()
+        nullable: false
+    
+    foreign_keys:
+      - name: fk_software_company
+        column: company_id
+        references:
+          table: companies
+          column: id
+        on_delete: CASCADE
+    
+    constraints:
+      - type: check
+        name: chk_software_environment
+        expression: "environment IN ('1', '2')"
+    
+    indexes:
+      - name: idx_software_company_id
+        columns: [company_id]
+        unique: true
+    
+    comment: "Configuración del software DIAN por empresa (1=Producción, 2=Habilitación)"
+
+down:
+  - type: drop_table
+    table: software
+    cascade: true
+  - type: drop_sequence
+    name: software_id_seq
+    cascade: true

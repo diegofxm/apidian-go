@@ -1,0 +1,159 @@
+version: "1.0"
+name: create_customers
+description: "Clientes/Adquirientes de facturas electrónicas"
+
+up:
+  - type: create_sequence
+    name: customers_id_seq
+
+  - type: create_table
+    table: customers
+    columns:
+      - name: id
+        type: BIGINT
+        default: "nextval('customers_id_seq')"
+        nullable: false
+        primary_key: true
+      - name: company_id
+        type: BIGINT
+        nullable: false
+      - name: document_type_id
+        type: INTEGER
+        nullable: false
+      - name: identification_number
+        type: VARCHAR(20)
+        nullable: false
+      - name: dv
+        type: VARCHAR(1)
+      - name: name
+        type: VARCHAR(255)
+        nullable: false
+      - name: trade_name
+        type: VARCHAR(255)
+      - name: tax_level_code_id
+        type: INTEGER
+        nullable: false
+      - name: tax_type_id
+        type: INTEGER
+        nullable: true
+      - name: type_organization_id
+        type: INTEGER
+        nullable: false
+      - name: type_regime_id
+        type: INTEGER
+        nullable: false
+      - name: country_id
+        type: INTEGER
+        nullable: false
+      - name: department_id
+        type: INTEGER
+        nullable: false
+      - name: municipality_id
+        type: INTEGER
+        nullable: false
+      - name: address_line
+        type: VARCHAR(255)
+        nullable: false
+      - name: postal_zone
+        type: VARCHAR(10)
+      - name: phone
+        type: VARCHAR(20)
+      - name: email
+        type: VARCHAR(100)
+      - name: is_active
+        type: BOOLEAN
+        default: true
+        nullable: false
+      - name: created_at
+        type: TIMESTAMPTZ
+        default: NOW()
+        nullable: false
+      - name: updated_at
+        type: TIMESTAMPTZ
+        default: NOW()
+        nullable: false
+    
+    foreign_keys:
+      - name: fk_customers_company
+        column: company_id
+        references:
+          table: companies
+          column: id
+        on_delete: CASCADE
+      - name: fk_customers_document_type
+        column: document_type_id
+        references:
+          table: document_types
+          column: id
+        on_delete: RESTRICT
+      - name: fk_customers_tax_level_code
+        column: tax_level_code_id
+        references:
+          table: tax_level_codes
+          column: id
+        on_delete: RESTRICT
+      - name: fk_customers_tax_type
+        column: tax_type_id
+        references:
+          table: tax_types
+          column: id
+        on_delete: RESTRICT
+      - name: fk_customers_type_organization
+        column: type_organization_id
+        references:
+          table: organization_types
+          column: id
+        on_delete: RESTRICT
+      - name: fk_customers_type_regime
+        column: type_regime_id
+        references:
+          table: regime_types
+          column: id
+        on_delete: RESTRICT
+      - name: fk_customers_country
+        column: country_id
+        references:
+          table: countries
+          column: id
+        on_delete: RESTRICT
+      - name: fk_customers_department
+        column: department_id
+        references:
+          table: departments
+          column: id
+        on_delete: RESTRICT
+      - name: fk_customers_municipality
+        column: municipality_id
+        references:
+          table: municipalities
+          column: id
+        on_delete: RESTRICT
+    
+    constraints:
+      - type: unique
+        name: uq_customers_company_identification
+        columns: [company_id, identification_number]
+      - type: check
+        name: chk_customers_email
+        expression: "email ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}$'"
+    
+    indexes:
+      - name: idx_customers_company_id
+        columns: [company_id]
+        where: "is_active = true"
+      - name: idx_customers_identification
+        columns: [identification_number]
+      - name: idx_customers_name_trgm
+        columns: [name]
+      - name: idx_customers_tax_type_id
+        columns: [tax_type_id]
+    
+    comment: "Clientes/Adquirientes de facturas electrónicas (AccountingCustomerParty en UBL)"
+
+down:
+  - type: drop_table
+    table: customers
+    cascade: true
+  - type: drop_sequence
+    name: customers_id_seq
+    cascade: true

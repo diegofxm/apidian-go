@@ -1,0 +1,6 @@
+code,name,description,is_active
+O-13,Gran contribuyente,Gran contribuyente,true
+O-15,Autorretenedor,Autorretenedor,true
+O-23,Agente de retención IVA,Agente de retención IVA,true
+O-47,Régimen simple de tributación,Régimen simple de tributación,true
+R-99-PN,No responsable de IVA,No responsable de IVA - Persona Natural,true

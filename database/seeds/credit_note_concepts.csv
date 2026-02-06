@@ -1,0 +1,7 @@
+code,name,description,is_active
+1,Devolución parcial de los bienes y/o no aceptación parcial del servicio,Devolución parcial de los bienes y/o no aceptación parcial del servicio,true
+2,Anulación de factura electrónica,Anulación de factura electrónica,true
+3,Rebaja total aplicada,Rebaja total aplicada,true
+4,Descuento total aplicado,Descuento total aplicado,true
+5,Rescisión: nulidad por falta de requisitos,Rescisión: nulidad por falta de requisitos,true
+6,Otros,Otros conceptos de nota crédito,true

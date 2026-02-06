@@ -1,0 +1,15 @@
+version: "1.0"
+name: create_extensions
+description: "Extensiones necesarias para PostgreSQL"
+
+up:
+  - type: create_extension
+    extension: uuid-ossp
+  - type: create_extension
+    extension: pg_trgm
+
+down:
+  - type: raw_sql
+    sql: "DROP EXTENSION IF EXISTS pg_trgm CASCADE;"
+  - type: raw_sql
+    sql: "DROP EXTENSION IF EXISTS \"uuid-ossp\" CASCADE;"

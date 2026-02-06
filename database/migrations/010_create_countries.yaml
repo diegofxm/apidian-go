@@ -1,0 +1,48 @@
+version: "1.0"
+name: create_countries
+description: "Catálogo de países según ISO 3166-1"
+
+up:
+  - type: create_table
+    table: countries
+    columns:
+      - name: id
+        type: SERIAL
+        primary_key: true
+      - name: code
+        type: VARCHAR(2)
+        nullable: false
+        unique: true
+      - name: name
+        type: VARCHAR(100)
+        nullable: false
+      - name: is_active
+        type: BOOLEAN
+        default: true
+        nullable: false
+      - name: created_at
+        type: TIMESTAMPTZ
+        default: NOW()
+        nullable: false
+      - name: updated_at
+        type: TIMESTAMPTZ
+        default: NOW()
+        nullable: false
+    
+    constraints:
+      - type: check
+        name: chk_countries_code
+        expression: "code ~ '^[A-Z]{2}$'"
+    
+    indexes:
+      - name: idx_countries_code
+        columns: [code]
+        unique: true
+        where: "is_active = true"
+    
+    comment: "Catálogo de países ISO 3166-1 alpha-2 (IdentificationCode en UBL)"
+
+down:
+  - type: drop_table
+    table: countries
+    cascade: true

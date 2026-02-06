@@ -1,0 +1,18 @@
+code,name,description,is_active
+94,Unidad,Unidad,true
+KGM,Kilogramo,Kilogramo,true
+GRM,Gramo,Gramo,true
+LTR,Litro,Litro,true
+MTR,Metro,Metro,true
+MTK,Metro cuadrado,Metro cuadrado,true
+MTQ,Metro cúbico,Metro cúbico,true
+TNE,Tonelada,Tonelada métrica,true
+HUR,Hora,Hora,true
+DAY,Día,Día,true
+MON,Mes,Mes,true
+ANN,Año,Año,true
+KWH,Kilovatio hora,Kilovatio hora,true
+GLI,Galón,Galón (UK),true
+BX,Caja,Caja,true
+PK,Paquete,Paquete,true
+DZN,Docena,Docena,true

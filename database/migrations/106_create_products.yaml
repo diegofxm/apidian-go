@@ -1,0 +1,123 @@
+version: "1.0"
+name: create_products
+description: "Catálogo de productos y servicios por empresa"
+
+up:
+  - type: create_sequence
+    name: products_id_seq
+
+  - type: create_table
+    table: products
+    columns:
+      - name: id
+        type: BIGINT
+        default: "nextval('products_id_seq')"
+        nullable: false
+        primary_key: true
+      - name: company_id
+        type: BIGINT
+        nullable: false
+      - name: code
+        type: VARCHAR(50)
+        nullable: false
+      - name: name
+        type: VARCHAR(255)
+        nullable: false
+      - name: description
+        type: TEXT
+        nullable: true
+      - name: type_item_identification_id
+        type: INTEGER
+        nullable: true
+      - name: standard_item_code
+        type: VARCHAR(50)
+        nullable: true
+      - name: unspsc_code
+        type: VARCHAR(20)
+        nullable: true
+      - name: unit_code_id
+        type: INTEGER
+        nullable: false
+      - name: price
+        type: NUMERIC(15,2)
+        nullable: false
+      - name: tax_type_id
+        type: INTEGER
+        nullable: false
+      - name: tax_rate
+        type: NUMERIC(5,2)
+        default: 19.00
+        nullable: true
+      - name: brand_name
+        type: VARCHAR(100)
+        nullable: true
+      - name: model_name
+        type: VARCHAR(100)
+        nullable: true
+      - name: is_active
+        type: BOOLEAN
+        default: true
+        nullable: false
+      - name: created_at
+        type: TIMESTAMPTZ
+        default: NOW()
+        nullable: false
+      - name: updated_at
+        type: TIMESTAMPTZ
+        default: NOW()
+        nullable: false
+    
+    foreign_keys:
+      - name: fk_products_company
+        column: company_id
+        references:
+          table: companies
+          column: id
+        on_delete: CASCADE
+      - name: fk_products_unit_code
+        column: unit_code_id
+        references:
+          table: unit_codes
+          column: id
+        on_delete: RESTRICT
+      - name: fk_products_tax_type
+        column: tax_type_id
+        references:
+          table: tax_types
+          column: id
+        on_delete: RESTRICT
+    
+    constraints:
+      - type: unique
+        name: uq_products_company_code
+        columns: [company_id, code]
+      - type: check
+        name: chk_products_price
+        expression: "price >= 0"
+      - type: check
+        name: chk_products_tax_rate
+        expression: "tax_rate >= 0 AND tax_rate <= 100"
+    
+    indexes:
+      - name: idx_products_company_id
+        columns: [company_id]
+        where: "is_active = true"
+      - name: idx_products_code
+        columns: [code]
+      - name: idx_products_name_trgm
+        columns: [name]
+      - name: idx_products_unspsc_code
+        columns: [unspsc_code]
+        where: "unspsc_code IS NOT NULL"
+      - name: idx_products_tax_type_id
+        columns: [tax_type_id]
+    
+    comment: "Catálogo de productos y servicios (Item en UBL)"
+
+down:
+  - type: drop_table
+    table: products
+    cascade: true
+  - type: drop_sequence
+    name: products_id_seq
+    cascade: true

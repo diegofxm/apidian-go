@@ -1,0 +1,70 @@
+version: "1.0"
+name: create_certificates
+description: "Digital certificates for electronic invoicing (PKCS12 .p12/.pfx files)"
+
+up:
+  - type: create_sequence
+    name: certificates_id_seq
+
+  - type: create_table
+    table: certificates
+    columns:
+      - name: id
+        type: BIGINT
+        default: "nextval('certificates_id_seq')"
+        nullable: false
+        primary_key: true
+      - name: company_id
+        type: BIGINT
+        nullable: false
+      - name: name
+        type: VARCHAR(255)
+        nullable: false
+        comment: "Certificate filename (e.g., company_123_2024.p12)"
+      - name: password
+        type: TEXT
+        nullable: false
+        comment: "Certificate password (encrypted)"
+      - name: is_active
+        type: BOOLEAN
+        default: true
+        nullable: false
+      - name: created_at
+        type: TIMESTAMPTZ
+        default: NOW()
+        nullable: false
+      - name: updated_at
+        type: TIMESTAMPTZ
+        default: NOW()
+        nullable: false
+    
+    foreign_keys:
+      - name: fk_certificates_company
+        column: company_id
+        references:
+          table: companies
+          column: id
+        on_delete: CASCADE
+    
+    constraints:
+      - type: unique
+        name: uq_certificates_company_active
+        columns: [company_id, is_active]
+        where: "is_active = true"
+    
+    indexes:
+      - name: idx_certificates_company
+        columns: [company_id]
+      - name: idx_certificates_active
+        columns: [company_id, is_active]
+        where: "is_active = true"
+    
+    comment: "Digital certificates (PKCS12) for signing electronic documents"
+
+down:
+  - type: drop_table
+    table: certificates
+    cascade: true
+  - type: drop_sequence
+    name: certificates_id_seq
+    cascade: true

@@ -1,0 +1,345 @@
+code,name,department_id,is_active
+05001,Medellín,1,true
+05002,Abejorral,1,true
+05004,Abriaquí,1,true
+05021,Alejandría,1,true
+05030,Amagá,1,true
+05031,Amalfi,1,true
+05034,Andes,1,true
+05036,Angelópolis,1,true
+05038,Angostura,1,true
+05040,Anorí,1,true
+05044,Anza,1,true
+05045,Apartadó,1,true
+05051,Arboletes,1,true
+05055,Argelia,1,true
+05059,Armenia,1,true
+05079,Barbosa,1,true
+05086,Belmira,1,true
+05088,Bello,1,true
+05091,Betania,1,true
+05093,Betulia,1,true
+05107,Cáceres,1,true
+05113,Caicedo,1,true
+05120,Caldas,1,true
+05125,Campamento,1,true
+05129,Cañasgordas,1,true
+05134,Caracolí,1,true
+05138,Caramanta,1,true
+05142,Carepa,1,true
+05145,Carmen de Viboral,1,true
+05147,Carolina,1,true
+05148,Caucasia,1,true
+05150,Chigorodó,1,true
+05154,Cisneros,1,true
+05172,Cocorná,1,true
+05190,Concepción,1,true
+05197,Concordia,1,true
+05206,Copacabana,1,true
+05209,Dabeiba,1,true
+05212,Donmatías,1,true
+05234,Ebéjico,1,true
+05237,El Bagre,1,true
+05240,Entrerríos,1,true
+05250,Envigado,1,true
+05264,Fredonia,1,true
+05266,Frontino,1,true
+05282,Giraldo,1,true
+05284,Girardota,1,true
+05306,Gómez Plata,1,true
+05308,Granada,1,true
+05310,Guadalupe,1,true
+05313,Guarne,1,true
+05315,Guatapé,1,true
+05318,Heliconia,1,true
+05321,Hispania,1,true
+05347,Itagüí,1,true
+05353,Ituango,1,true
+05360,Jardín,1,true
+05361,Jericó,1,true
+05364,La Ceja,1,true
+05368,La Estrella,1,true
+05376,La Pintada,1,true
+05380,La Unión,1,true
+05390,Liborina,1,true
+05400,Maceo,1,true
+05411,Marinilla,1,true
+05425,Montebello,1,true
+05440,Murindó,1,true
+05467,Nariño,1,true
+05475,Necoclí,1,true
+05480,Nechí,1,true
+05483,Olaya,1,true
+05490,Peñol,1,true
+05495,Peque,1,true
+05501,Pueblorrico,1,true
+05541,Puerto Berrío,1,true
+05543,Puerto Nare,1,true
+05576,Remedios,1,true
+05579,Retiro,1,true
+05585,Rionegro,1,true
+05591,Sabanalarga,1,true
+05604,Sabaneta,1,true
+05607,Salgar,1,true
+08001,Barranquilla,2,true
+08078,Baranoa,2,true
+08137,Campo de la Cruz,2,true
+08141,Candelaria,2,true
+08296,Galapa,2,true
+08372,Juan de Acosta,2,true
+08421,Luruaco,2,true
+08433,Malambo,2,true
+08436,Manatí,2,true
+08520,Palmar de Varela,2,true
+08549,Piojó,2,true
+08558,Polonuevo,2,true
+08560,Ponedera,2,true
+08573,Puerto Colombia,2,true
+08606,Repelón,2,true
+08634,Sabanagrande,2,true
+08638,Sabanalarga,2,true
+08675,Santa Lucía,2,true
+08685,Santo Tomás,2,true
+08758,Soledad,2,true
+08770,Suan,2,true
+08832,Tubará,2,true
+08849,Usiacurí,2,true
+11001,Bogotá D.C.,3,true
+13001,Cartagena,4,true
+13006,Achí,4,true
+13030,Altos del Rosario,4,true
+13042,Arenal,4,true
+13052,Arjona,4,true
+13062,Arroyohondo,4,true
+13074,Barranco de Loba,4,true
+13140,Calamar,4,true
+13160,Cantagallo,4,true
+13188,Cicuco,4,true
+13212,Córdoba,4,true
+13222,Clemencia,4,true
+13244,El Carmen de Bolívar,4,true
+13248,El Guamo,4,true
+13268,El Peñón,4,true
+13300,Hatillo de Loba,4,true
+13430,Magangué,4,true
+13433,Mahates,4,true
+13440,Margarita,4,true
+13442,María la Baja,4,true
+13458,Montecristo,4,true
+13468,Mompós,4,true
+13473,Morales,4,true
+13490,Norosí,4,true
+13549,Pinillos,4,true
+13580,Regidor,4,true
+13600,Río Viejo,4,true
+13620,San Cristóbal,4,true
+13647,San Estanislao,4,true
+13650,San Fernando,4,true
+13654,San Jacinto,4,true
+13655,San Jacinto del Cauca,4,true
+13657,San Juan Nepomuceno,4,true
+13667,San Martín de Loba,4,true
+13670,San Pablo,4,true
+13673,Santa Catalina,4,true
+13683,Santa Rosa,4,true
+13688,Santa Rosa del Sur,4,true
+13744,Simití,4,true
+13760,Soplaviento,4,true
+13780,Talaigua Nuevo,4,true
+13810,Tiquisio,4,true
+13836,Turbaco,4,true
+13838,Turbaná,4,true
+13873,Villanueva,4,true
+13894,Zambrano,4,true
+15001,Tunja,5,true
+15022,Almeida,5,true
+15047,Aquitania,5,true
+15051,Arcabuco,5,true
+15087,Belén,5,true
+15090,Berbeo,5,true
+15092,Betéitiva,5,true
+15097,Boavita,5,true
+15104,Boyacá,5,true
+15106,Briceño,5,true
+15109,Buenavista,5,true
+15114,Busbanzá,5,true
+15131,Caldas,5,true
+15135,Campohermoso,5,true
+15162,Cerinza,5,true
+15172,Chinavita,5,true
+15176,Chiquinquirá,5,true
+15180,Chiscas,5,true
+15183,Chita,5,true
+15185,Chitaraque,5,true
+15187,Chivatá,5,true
+15189,Ciénega,5,true
+15204,Cómbita,5,true
+15212,Coper,5,true
+15215,Corrales,5,true
+15218,Covarachía,5,true
+15223,Cubará,5,true
+15224,Cucaita,5,true
+15226,Cuítiva,5,true
+15232,Chíquiza,5,true
+15236,Chivor,5,true
+15238,Duitama,5,true
+15244,El Cocuy,5,true
+15248,El Espino,5,true
+15272,Firavitoba,5,true
+15276,Floresta,5,true
+15293,Gachantivá,5,true
+15296,Gameza,5,true
+15299,Garagoa,5,true
+15317,Guacamayas,5,true
+15322,Guateque,5,true
+15325,Guayatá,5,true
+15332,Güicán,5,true
+15362,Iza,5,true
+15367,Jenesano,5,true
+15368,Jericó,5,true
+15377,Labranzagrande,5,true
+15380,La Capilla,5,true
+15401,La Victoria,5,true
+15403,La Uvita,5,true
+15407,Villa de Leyva,5,true
+15425,Macanal,5,true
+15442,Maripí,5,true
+15455,Miraflores,5,true
+15464,Mongua,5,true
+15466,Monguí,5,true
+15469,Moniquirá,5,true
+15476,Motavita,5,true
+15480,Muzo,5,true
+15491,Nobsa,5,true
+15494,Nuevo Colón,5,true
+15500,Oicatá,5,true
+15507,Otanche,5,true
+15511,Pachavita,5,true
+15514,Páez,5,true
+15516,Paipa,5,true
+15518,Pajarito,5,true
+15522,Panqueba,5,true
+15531,Pauna,5,true
+15533,Paya,5,true
+15537,Paz de Río,5,true
+15542,Pesca,5,true
+15550,Pisba,5,true
+15572,Puerto Boyacá,5,true
+15580,Quípama,5,true
+15599,Ramiriquí,5,true
+15600,Ráquira,5,true
+15621,Rondón,5,true
+15632,Saboyá,5,true
+15638,Sáchica,5,true
+15646,Samacá,5,true
+15660,San Eduardo,5,true
+15664,San José de Pare,5,true
+15667,San Luis de Gaceno,5,true
+15673,San Mateo,5,true
+15676,San Miguel de Sema,5,true
+15681,San Pablo de Borbur,5,true
+15686,Santana,5,true
+15690,Santa María,5,true
+15693,Santa Rosa de Viterbo,5,true
+15696,Santa Sofía,5,true
+15720,Sativanorte,5,true
+15723,Sativasur,5,true
+15740,Siachoque,5,true
+15753,Soatá,5,true
+15755,Socotá,5,true
+15757,Socha,5,true
+15759,Sogamoso,5,true
+15761,Somondoco,5,true
+15762,Sora,5,true
+15763,Sotaquirá,5,true
+15764,Soracá,5,true
+15774,Susacón,5,true
+15776,Sutamarchán,5,true
+15778,Sutatenza,5,true
+15790,Tasco,5,true
+15798,Tenza,5,true
+15804,Tibaná,5,true
+15806,Tibasosa,5,true
+15808,Tinjacá,5,true
+15810,Tipacoque,5,true
+15814,Toca,5,true
+15816,Togüí,5,true
+15820,Tópaga,5,true
+15822,Tota,5,true
+15832,Tununguá,5,true
+15835,Turmequé,5,true
+15837,Tuta,5,true
+15839,Tutazá,5,true
+15842,Umbita,5,true
+15861,Ventaquemada,5,true
+15879,Viracachá,5,true
+15897,Zetaquira,5,true
+17001,Manizales,6,true
+17013,Aguadas,6,true
+17042,Anserma,6,true
+17050,Aranzazu,6,true
+17088,Belalcázar,6,true
+17174,Chinchiná,6,true
+17272,Filadelfia,6,true
+17380,La Dorada,6,true
+17388,La Merced,6,true
+17433,Manzanares,6,true
+17442,Marmato,6,true
+17444,Marquetalia,6,true
+17446,Marulanda,6,true
+17486,Neira,6,true
+17495,Norcasia,6,true
+17513,Pácora,6,true
+17524,Palestina,6,true
+17541,Pensilvania,6,true
+17614,Riosucio,6,true
+17616,Risaralda,6,true
+17653,Salamina,6,true
+17662,Samaná,6,true
+17665,San José,6,true
+17777,Supía,6,true
+17867,Victoria,6,true
+17873,Villamaría,6,true
+17877,Viterbo,6,true
+76001,Cali,24,true
+76020,Alcalá,24,true
+76036,Andalucía,24,true
+76041,Ansermanuevo,24,true
+76054,Argelia,24,true
+76100,Bolívar,24,true
+76109,Buenaventura,24,true
+76111,Guadalajara de Buga,24,true
+76113,Bugalagrande,24,true
+76122,Caicedonia,24,true
+76126,Calima,24,true
+76130,Candelaria,24,true
+76147,Cartago,24,true
+76233,Dagua,24,true
+76243,El Águila,24,true
+76246,El Cairo,24,true
+76248,El Cerrito,24,true
+76250,El Dovio,24,true
+76275,Florida,24,true
+76306,Ginebra,24,true
+76318,Guacarí,24,true
+76364,Jamundí,24,true
+76377,La Cumbre,24,true
+76400,La Unión,24,true
+76403,La Victoria,24,true
+76497,Obando,24,true
+76520,Palmira,24,true
+76563,Pradera,24,true
+76606,Restrepo,24,true
+76616,Riofrío,24,true
+76622,Roldanillo,24,true
+76670,San Pedro,24,true
+76736,Sevilla,24,true
+76823,Toro,24,true
+76828,Trujillo,24,true
+76834,Tuluá,24,true
+76845,Ulloa,24,true
+76863,Versalles,24,true
+76869,Vijes,24,true
+76890,Yotoco,24,true
+76892,Yumbo,24,true
+76895,Zarzal,24,true

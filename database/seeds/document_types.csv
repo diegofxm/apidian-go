@@ -1,0 +1,11 @@
+code,name,description,is_active
+11,Registro civil,Registro civil de nacimiento,true
+12,Tarjeta de identidad,Tarjeta de identidad (menores de edad),true
+13,Cédula de ciudadanía,Cédula de ciudadanía colombiana,true
+21,Tarjeta de extranjería,Tarjeta de extranjería,true
+22,Cédula de extranjería,Cédula de extranjería,true
+31,NIT,Número de Identificación Tributaria,true
+41,Pasaporte,Pasaporte,true
+42,Documento de identificación extranjero,Documento de identificación extranjero,true
+50,NIT de otro país,NIT de otro país,true
+91,NUIP,Número Único de Identificación Personal,true
