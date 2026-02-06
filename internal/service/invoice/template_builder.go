@@ -202,6 +202,49 @@ func (s *InvoiceService) BuildInvoiceWithTemplates(inv *domain.Invoice) ([]byte,
 		fmt.Sprintf("%.2f", inv.Total),
 	)
 
+	// 10.5. Calcular y agregar TaxTotals
+	taxMap := make(map[string]*invoice.TaxTotalTemplateData)
+	for _, line := range inv.Lines {
+		if line.TaxAmount > 0 {
+			key := line.TaxTypeCode
+			if taxMap[key] == nil {
+				taxMap[key] = &invoice.TaxTotalTemplateData{
+					TaxAmount:  "0.00",
+					CurrencyID: "COP",
+					TaxSubtotals: []invoice.TaxSubtotalTemplateData{},
+				}
+			}
+			
+			// Agregar subtotal de impuesto
+			taxSubtotal := invoice.TaxSubtotalTemplateData{
+				TaxableAmount: fmt.Sprintf("%.2f", line.LineTotal),
+				TaxAmount:     fmt.Sprintf("%.2f", line.TaxAmount),
+				CurrencyID:    "COP",
+				Percent:       fmt.Sprintf("%.2f", line.TaxRate),
+				TaxCategory: invoice.TaxCategoryTemplateData{
+					Percent: fmt.Sprintf("%.2f", line.TaxRate),
+					TaxScheme: invoice.TaxSchemeTemplateData{
+						ID:   line.TaxTypeCode,
+						Name: line.TaxTypeName,
+					},
+				},
+			}
+			taxMap[key].TaxSubtotals = append(taxMap[key].TaxSubtotals, taxSubtotal)
+		}
+	}
+	
+	// Calcular totales por tipo de impuesto y agregar al builder
+	for _, taxTotal := range taxMap {
+		var totalAmount float64
+		for _, subtotal := range taxTotal.TaxSubtotals {
+			var amount float64
+			fmt.Sscanf(subtotal.TaxAmount, "%f", &amount)
+			totalAmount += amount
+		}
+		taxTotal.TaxAmount = fmt.Sprintf("%.2f", totalAmount)
+		builder.AddTaxTotal(*taxTotal)
+	}
+
 	// 11. Agregar líneas
 	for i, line := range inv.Lines {
 		invoiceLine := invoice.InvoiceLineTemplateData{
@@ -228,6 +271,30 @@ func (s *InvoiceService) BuildInvoiceWithTemplates(inv *domain.Invoice) ([]byte,
 				BaseQuantity: "1.000000",
 			},
 		}
+		
+		// Agregar impuestos a la línea si tiene
+		if line.TaxAmount > 0 {
+			invoiceLine.TaxTotal = &invoice.TaxTotalTemplateData{
+				TaxAmount:  fmt.Sprintf("%.2f", line.TaxAmount),
+				CurrencyID: "COP",
+				TaxSubtotals: []invoice.TaxSubtotalTemplateData{
+					{
+						TaxableAmount: fmt.Sprintf("%.2f", line.LineTotal),
+						TaxAmount:     fmt.Sprintf("%.2f", line.TaxAmount),
+						CurrencyID:    "COP",
+						Percent:       fmt.Sprintf("%.2f", line.TaxRate),
+						TaxCategory: invoice.TaxCategoryTemplateData{
+							Percent: fmt.Sprintf("%.2f", line.TaxRate),
+							TaxScheme: invoice.TaxSchemeTemplateData{
+								ID:   line.TaxTypeCode,
+								Name: line.TaxTypeName,
+							},
+						},
+					},
+				},
+			}
+		}
+		
 		builder.AddInvoiceLine(invoiceLine)
 	}
 

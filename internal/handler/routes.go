@@ -49,6 +49,10 @@ func SetupProtectedRoutes(api fiber.Router, db *database.Database, cfg *config.C
 	companies.Put("/:id", companyHandler.Update)
 	companies.Delete("/:id", companyHandler.Delete)
 	companies.Post("/:id/certificate", companyHandler.UploadCertificate) // Deprecated
+	
+	// TODO: Implementar certificación ante DIAN (SendTestSetAsync)
+	// companies.Post("/:id/certification/testset", companyHandler.SubmitTestSet)     // Enviar set de pruebas (30 FV + 10 NC + 10 ND)
+	// companies.Get("/:id/certification/status", companyHandler.GetCertificationStatus) // Consultar estado de certificación (GetStatusZip)
 
 	// Customers (FLAT with company_id filter)
 	customers := api.Group("/customers")
@@ -78,12 +82,16 @@ func SetupProtectedRoutes(api fiber.Router, db *database.Database, cfg *config.C
 	invoices.Put("/:id", invoiceHandler.Update)
 	invoices.Delete("/:id", invoiceHandler.Delete)
 	invoices.Post("/:id/sign", invoiceHandler.Sign)                       // Firmar factura
-	invoices.Post("/:id/send", invoiceHandler.SendToDIAN)                 // Enviar a DIAN
+	invoices.Post("/:id/send", invoiceHandler.SendToDIAN)                 // Enviar a DIAN (SendBillSync - individual)
 	invoices.Post("/:id/status", invoiceHandler.GetInvoiceStatus)         // Consultar estado en DIAN
 	api.Get("/invoices/pdf/:number", pdfHandler.GenerateInvoicePDFByNumber) // Por número de factura (título visible)
 	invoices.Post("/:id/attached", invoiceHandler.GenerateAttachedDocument) // Generar AttachedDocument
 	invoices.Get("/:id/download", invoiceHandler.DownloadZIP)             // Descargar ZIP final
 	invoices.Get("/:id/xml", invoiceHandler.GetXML)                       // Obtener XML firmado
+	
+	// TODO: Implementar envío masivo de facturas (SendBillAsync)
+	// invoices.Post("/batch/send", invoiceHandler.SendBatchToDIAN)       // Enviar lote de facturas (retorna ZipKey)
+	// invoices.Get("/batch/:zipKey/status", invoiceHandler.GetBatchStatus) // Consultar estado de lote (GetStatusZip)
 
 	// Certificates (FLAT with company_id filter)
 	certificates := api.Group("/certificates")

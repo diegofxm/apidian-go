@@ -3,7 +3,7 @@ ubl21-dian/
 
 test_*.go
 !scripts/*.go
-# soap_request_debug.xml
+soap_request_debug.xml
 
 # Binarios compilados
 *.exe
@@ -13,8 +13,8 @@ test_*.go
 *.dylib
 bin/
 dist/
-# *.p12
-# *.pem
+*.p12
+*.pem
 
 # Archivos de test
 *.test
@@ -35,8 +35,8 @@ vendor/
 .idea/
 
 # Storage - Archivos privados de la aplicación
-# storage/app/*
-# storage/logs/*
+storage/app/*
+storage/logs/*
 
 # Mantener estructura de carpetas y assets
 !storage/app/.gitkeep
@@ -57,9 +57,7 @@ tmp/
 temp/
 *.tmp
 
-# Archivos de debug
-# *_debug.xml
-# soap_*.xml
+# Archivos de debu*_debug.xmsoap_*.xml
 
 # Logs
 *.log

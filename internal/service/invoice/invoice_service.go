@@ -494,28 +494,17 @@ func (s *InvoiceService) SendToDIAN(id int64, userID int64) error {
 	// 10. Preparar request para DIAN según ambiente
 	var response *types.Response
 	
-	if environment == types.Habilitacion && invoice.Software.TestSetID != nil && *invoice.Software.TestSetID != "" {
-		testSetRequest := &types.SendTestSetAsyncRequest{
-			FileName:    fmt.Sprintf("FES-%s.zip", invoice.Number),
-			ContentFile: zipBase64,
-			TestSetId:   *invoice.Software.TestSetID,
-		}
-		testSetResponse, err := client.SendTestSetAsync(testSetRequest)
-		if err != nil {
-			return fmt.Errorf("error sending to DIAN (TestSet): %w", err)
-		}
-		response = &testSetResponse.Response
-	} else {
-		syncRequest := &types.SendBillSyncRequest{
-			FileName:    fmt.Sprintf("FES-%s.zip", invoice.Number),
-			ContentFile: zipBase64,
-		}
-		syncResponse, err := client.SendBillSync(syncRequest)
-		if err != nil {
-			return fmt.Errorf("error sending to DIAN: %w", err)
-		}
-		response = &syncResponse.Response
+	// Usar SendBillSync en todos los casos para obtener respuesta inmediata
+	// SendBillAsync solo retorna ZipKey sin StatusCode/StatusDescription
+	syncRequest := &types.SendBillSyncRequest{
+		FileName:    fmt.Sprintf("FES-%s.zip", invoice.Number),
+		ContentFile: zipBase64,
 	}
+	syncResponse, err := client.SendBillSync(syncRequest)
+	if err != nil {
+		return fmt.Errorf("error sending to DIAN: %w", err)
+	}
+	response = &syncResponse.Response
 
 	// 11. Guardar XmlDocumentKey (TrackId) si existe (para consultas posteriores con GetStatus)
 	if response.XmlDocumentKey != "" {
